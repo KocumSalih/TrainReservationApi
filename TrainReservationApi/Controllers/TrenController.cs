@@ -10,7 +10,7 @@ namespace TrainReservationApi.Controllers
     public class TrenController : ControllerBase
     {
 
-        [HttpPost]
+        [HttpPost("ReservasyonYap")]
         public IActionResult ReservasyonYap(RezervasyonBiletRequest request)
         {
             return request == null ?

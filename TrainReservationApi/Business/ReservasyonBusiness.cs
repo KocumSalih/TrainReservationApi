@@ -52,14 +52,18 @@ namespace TrainReservationApi.Business
                 foreach (var vagon in _rezervasyonRequest.Tren.Vagonlar)
                 {
                     int vagonDoldurulabilirKoltukAdedi = vagon.DoldurulabilirKoltukHesapla();
-                    if (vagonDoldurulabilirKoltukAdedi>0)
+                    if (vagonDoldurulabilirKoltukAdedi != 0 && kalanRezervasyonSayisi > 0)
                     {
-                        kalanRezervasyonSayisi -= vagonDoldurulabilirKoltukAdedi;
-                        if (kalanRezervasyonSayisi >= 0)
+                        if (vagonDoldurulabilirKoltukAdedi <= kalanRezervasyonSayisi)
                         {
-                            _rezervasyonResponse.YerlesimAyrinti.Add(new YerlesimAyrinti() { KisiSayisi = vagonDoldurulabilirKoltukAdedi, VagonAdi = vagon.Ad });
-                            result = true;
+                            _rezervasyonResponse.YerlesimAyrinti.Add(new YerlesimAyrinti() { KisiSayisi = vagonDoldurulabilirKoltukAdedi, VagonAdi = vagon.Ad });                           
                         }
+                        else
+                        {
+                            _rezervasyonResponse.YerlesimAyrinti.Add(new YerlesimAyrinti() { KisiSayisi = kalanRezervasyonSayisi, VagonAdi = vagon.Ad });
+                        }
+                        result = true;
+                        kalanRezervasyonSayisi -= vagonDoldurulabilirKoltukAdedi;
                     }
                 }
             }
